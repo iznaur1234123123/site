@@ -1,10 +1,14 @@
-// Продвинутые анимации и эффекты
+// Ультра-современные анимации и эффекты
 document.addEventListener('DOMContentLoaded', function() {
     initParticles();
     initTextAnimations();
-
     initScrollProgress();
     initSmoothReveal();
+    initParallaxEffects();
+    initMagneticButtons();
+    initScrollReveal();
+    initFloatingElements();
+    initCursorEffects();
 });
 
 // Частицы на фоне
@@ -300,4 +304,129 @@ document.addEventListener('DOMContentLoaded', () => {
     staggerAnimation(serviceCards, 'fade-in', 150);
     staggerAnimation(portfolioItems, 'fade-in', 200);
 });
+
+// Оптимизированные параллакс эффекты
+function initParallaxEffects() {
+    const parallaxElements = document.querySelectorAll('.hero-background, .hero-overlay');
+    let ticking = false;
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        
+        parallaxElements.forEach(element => {
+            element.style.transform = `translate3d(0, ${rate}px, 0)`;
+        });
+        
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    });
+}
+
+// Магнитные кнопки
+function initMagneticButtons() {
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            button.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) scale(1.05)`;
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+}
+
+// Продвинутые анимации появления
+function initScrollReveal() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                
+                // Добавляем эффект волны
+                if (entry.target.classList.contains('service-card')) {
+                    setTimeout(() => {
+                        entry.target.style.animation = 'waveIn 0.6s ease-out';
+                    }, 100);
+                }
+            }
+        });
+    }, observerOptions);
+    
+    // Наблюдаем за элементами
+    document.querySelectorAll('.about-card, .service-card, .portfolio-item, .contact-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(50px)';
+        el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        observer.observe(el);
+    });
+}
+
+// Плавающие элементы
+function initFloatingElements() {
+    const floatingElements = document.querySelectorAll('.service-icon, .stat-item');
+    
+    floatingElements.forEach((element, index) => {
+        const delay = index * 0.5;
+        const duration = 3 + Math.random() * 2;
+        
+        element.style.animation = `float ${duration}s ease-in-out infinite`;
+        element.style.animationDelay = `${delay}s`;
+    });
+}
+
+// Эффекты курсора
+function initCursorEffects() {
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    cursor.style.cssText = `
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, rgba(0, 245, 255, 0.8) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.1s ease;
+        mix-blend-mode: difference;
+    `;
+    document.body.appendChild(cursor);
+    
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX - 10 + 'px';
+        cursor.style.top = e.clientY - 10 + 'px';
+    });
+    
+    // Увеличение курсора при наведении на интерактивные элементы
+    const interactiveElements = document.querySelectorAll('a, button, .btn');
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'scale(2)';
+            cursor.style.background = 'radial-gradient(circle, rgba(255, 0, 128, 0.8) 0%, transparent 70%)';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'scale(1)';
+            cursor.style.background = 'radial-gradient(circle, rgba(0, 245, 255, 0.8) 0%, transparent 70%)';
+        });
+    });
+}
 

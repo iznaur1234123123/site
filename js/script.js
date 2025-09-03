@@ -55,7 +55,7 @@ function initMobileMenu() {
     });
 }
 
-// Анимации при прокрутке
+// Ультра-современные анимации при прокрутке
 function initScrollAnimations() {
     const observerOptions = {
         threshold: 0.1,
@@ -71,12 +71,24 @@ function initScrollAnimations() {
                 if (entry.target.classList.contains('stat-number')) {
                     animateNumber(entry.target);
                 }
+                
+                // Добавляем эффект свечения для карточек
+                if (entry.target.classList.contains('service-card')) {
+                    setTimeout(() => {
+                        entry.target.style.animation = 'glowPulse 2s ease-in-out infinite';
+                    }, 500);
+                }
+                
+                // Анимация для заголовков секций
+                if (entry.target.classList.contains('section-title')) {
+                    entry.target.style.animation = 'titleGlow 3s ease-in-out infinite alternate';
+                }
             }
         });
     }, observerOptions);
     
     // Наблюдаем за элементами
-    document.querySelectorAll('.about-card, .service-card, .portfolio-item, .contact-item, .stat-item').forEach(el => {
+    document.querySelectorAll('.about-card, .service-card, .portfolio-item, .contact-item, .stat-item, .section-title').forEach(el => {
         observer.observe(el);
     });
 }
@@ -263,7 +275,116 @@ function initLazyLoading() {
     images.forEach(img => imageObserver.observe(img));
 }
 
+// Дополнительные интерактивные эффекты
+function initAdvancedEffects() {
+    // Эффект печатания для заголовков
+    const typewriterElements = document.querySelectorAll('.hero-title .title-line');
+    typewriterElements.forEach(element => {
+        const text = element.textContent;
+        element.textContent = '';
+        element.style.borderRight = '2px solid var(--accent-primary)';
+        
+        let i = 0;
+        const typeWriter = () => {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                element.style.borderRight = 'none';
+            }
+        };
+        
+        setTimeout(typeWriter, 1000);
+    });
+    
+    // Эффект морфинга для кнопок
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+            button.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+        });
+    });
+    
+    // Эффект волны при клике
+    document.addEventListener('click', (e) => {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            left: ${e.clientX - 10}px;
+            top: ${e.clientY - 10}px;
+            animation: ripple 0.6s ease-out forwards;
+        `;
+        
+        document.body.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    });
+}
+
+// Оптимизированный эффект скролла
+function initSmoothScroll() {
+    let isScrolling = false;
+    let scrollTimeout;
+    
+    window.addEventListener('scroll', () => {
+        if (!isScrolling) {
+            window.requestAnimationFrame(() => {
+                // Добавляем эффект размытия при быстром скролле
+                const scrollSpeed = Math.abs(window.scrollY - (window.lastScrollY || 0));
+                if (scrollSpeed > 10) {
+                    document.body.style.filter = 'blur(1px)';
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        document.body.style.filter = 'none';
+                    }, 100);
+                }
+                
+                window.lastScrollY = window.scrollY;
+                isScrolling = false;
+            });
+        }
+        isScrolling = true;
+    });
+}
+
+// Оптимизация производительности
+function optimizePerformance() {
+    // Отключаем анимации на слабых устройствах
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+        document.documentElement.style.setProperty('--transition', 'none');
+        document.documentElement.style.setProperty('--transition-fast', 'none');
+        document.documentElement.style.setProperty('--transition-slow', 'none');
+    }
+    
+    // Оптимизация для мобильных устройств
+    if (window.innerWidth < 768) {
+        // Уменьшаем количество частиц
+        const particles = document.querySelectorAll('.particles div');
+        particles.forEach((particle, index) => {
+            if (index > 20) {
+                particle.style.display = 'none';
+            }
+        });
+    }
+}
+
 // Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     initLazyLoading();
+    initAdvancedEffects();
+    initSmoothScroll();
+    optimizePerformance();
 });
