@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Булат Докуев - Профессиональный ведущий</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">Булат Докуев</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Главная</a></li>
+                <li><a href="#about" class="nav-link">О себе</a></li>
+                <li><a href="#services" class="nav-link">Услуги</a></li>
+                <li><a href="#portfolio" class="nav-link">Портфолио</a></li>
+                <li><a href="#contact" class="nav-link">Контакты</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный экран -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <video autoplay muted loop id="hero-video">
+                <source src="uploads/hero-video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line" data-content="hero_title">Булат Докуев</span>
+                    <span class="title-subtitle" data-content="hero_subtitle">Профессиональный ведущий мероприятий</span>
+                </h1>
+                <p class="hero-description" data-content="hero_description">
+                    Создаю незабываемую атмосферу на ваших торжествах. 
+                    Свадьбы, корпоративы, дни рождения - каждое событие становится особенным.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Связаться со мной</a>
+                    <a href="#portfolio" class="btn btn-secondary">Смотреть работы</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="uploads/hero-photo.jpg" alt="Булат Докуев" data-image="hero_photo">
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- О себе -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-content="about_title">О ведущем</h2>
+                <p class="section-subtitle" data-content="about_subtitle">Многолетний опыт и безграничная энергия</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="about-card">
+                        <h3 data-content="about_card1_title">Опыт работы</h3>
+                        <p data-content="about_card1_text">Более 8 лет успешной работы ведущим на различных мероприятиях. За это время провел свыше 500 торжеств.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3 data-content="about_card2_title">Индивидуальный подход</h3>
+                        <p data-content="about_card2_text">Каждое мероприятие уникально. Я тщательно изучаю пожелания клиентов и создаю персональный сценарий.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3 data-content="about_card3_title">Современные технологии</h3>
+                        <p data-content="about_card3_text">Использую профессиональное звуковое и световое оборудование для создания незабываемой атмосферы.</p>
+                    </div>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-number="500">500+</div>
+                        <div class="stat-label">Проведенных мероприятий</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-number="8">8</div>
+                        <div class="stat-label">Лет опыта</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-number="100">100%</div>
+                        <div class="stat-label">Довольных клиентов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-content="services_title">Услуги</h2>
+                <p class="section-subtitle" data-content="services_subtitle">Профессиональное ведение любых мероприятий</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 data-content="service1_title">Свадьбы</h3>
+                    <p data-content="service1_description">Создаю романтичную и торжественную атмосферу для самого важного дня в вашей жизни</p>
+                    <div class="service-features">
+                        <span>Церемония</span>
+                        <span>Банкет</span>
+                        <span>Развлечения</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 data-content="service2_title">Корпоративы</h3>
+                    <p data-content="service2_description">Объединяю коллектив и создаю позитивную атмосферу на корпоративных мероприятиях</p>
+                    <div class="service-features">
+                        <span>Презентации</span>
+                        <span>Тимбилдинг</span>
+                        <span>Награждения</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3 data-content="service3_title">Дни рождения</h3>
+                    <p data-content="service3_description">Делаю день рождения незабываемым праздником для именинника и гостей</p>
+                    <div class="service-features">
+                        <span>Юбилеи</span>
+                        <span>Детские праздники</span>
+                        <span>Тематические вечеринки</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 data-content="service4_title">Особые события</h3>
+                    <p data-content="service4_description">Провожу выпускные, открытия, фестивали и другие значимые мероприятия</p>
+                    <div class="service-features">
+                        <span>Выпускные</span>
+                        <span>Открытия</span>
+                        <span>Фестивали</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Портфолио -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-content="portfolio_title">Портфолио</h2>
+                <p class="section-subtitle" data-content="portfolio_subtitle">Яркие моменты с проведенных мероприятий</p>
+            </div>
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- Портфолио будет загружаться динамически -->
+            </div>
+            <div class="portfolio-nav">
+                <button class="btn btn-primary" onclick="loadMorePortfolio()">Загрузить еще</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-content="contact_title">Контакты</h2>
+                <p class="section-subtitle" data-content="contact_subtitle">Как со мной связаться</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Телефон</h4>
+                            <span data-content="contact_phone">+7 (XXX) XXX-XX-XX</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <span data-content="contact_email">bulat@example.com</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Город</h4>
+                            <span data-content="contact_city">Москва</span>
+                        </div>
+                    </div>
+                    <div class="contact-social">
+                        <h4>Социальные сети</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link" data-content="social_instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link" data-content="social_vk"><i class="fab fa-vk"></i></a>
+                            <a href="#" class="social-link" data-content="social_telegram"><i class="fab fa-telegram"></i></a>
+                            <a href="#" class="social-link" data-content="social_whatsapp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2024 Булат Докуев. Все права защищены.</p>
+                </div>
+                <div class="footer-admin">
+                    <a href="admin/" class="admin-link">Панель управления</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="js/script.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>
