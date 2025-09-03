@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     loadContent();
     loadPortfolio();
+    loadReviews();
     
     // Плавная прокрутка к якорям
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -41,21 +42,23 @@ function initMobileMenu() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     
-    hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        hamburger.classList.toggle('active');
-    });
-    
-    // Закрытие меню при клике на ссылку
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('active');
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
         });
-    });
+        
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    }
 }
 
-// Ультра-современные анимации при прокрутке
+// Анимации при прокрутке
 function initScrollAnimations() {
     const observerOptions = {
         threshold: 0.1,
@@ -71,24 +74,12 @@ function initScrollAnimations() {
                 if (entry.target.classList.contains('stat-number')) {
                     animateNumber(entry.target);
                 }
-                
-                // Добавляем эффект свечения для карточек
-                if (entry.target.classList.contains('service-card')) {
-                    setTimeout(() => {
-                        entry.target.style.animation = 'glowPulse 2s ease-in-out infinite';
-                    }, 500);
-                }
-                
-                // Анимация для заголовков секций
-                if (entry.target.classList.contains('section-title')) {
-                    entry.target.style.animation = 'titleGlow 3s ease-in-out infinite alternate';
-                }
             }
         });
     }, observerOptions);
     
     // Наблюдаем за элементами
-    document.querySelectorAll('.about-card, .service-card, .portfolio-item, .contact-item, .stat-item, .section-title').forEach(el => {
+    document.querySelectorAll('.about-card, .service-card, .portfolio-item, .contact-item, .stat-item, .review-item').forEach(el => {
         observer.observe(el);
     });
 }
@@ -114,137 +105,193 @@ function animateNumber(element) {
     requestAnimationFrame(updateNumber);
 }
 
-
-
-// Уведомления
-function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 10px;
-        color: white;
-        font-weight: 500;
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        background: ${type === 'success' ? '#28a745' : '#dc3545'};
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
-}
-
-// Загрузка контента
+// Загрузка контента из API
 async function loadContent() {
     try {
         const response = await fetch('api/content.php');
         const content = await response.json();
         
-        // Обновляем текстовый контент
-        document.querySelectorAll('[data-content]').forEach(element => {
-            const key = element.dataset.content;
-            if (content[key]) {
-                if (element.tagName === 'A') {
-                    element.href = content[key];
+        // Обновляем контент на странице
+        Object.keys(content).forEach(key => {
+            const elements = document.querySelectorAll(`[data-content="${key}"]`);
+            elements.forEach(element => {
+                if (element.tagName === 'IMG') {
+                    element.src = content[key];
                 } else {
                     element.textContent = content[key];
                 }
-            }
+            });
         });
-        
-        // Обновляем изображения
-        document.querySelectorAll('[data-image]').forEach(element => {
-            const key = element.dataset.image;
-            if (content[key]) {
-                element.src = content[key];
-            }
-        });
-        
     } catch (error) {
-        console.log('Контент загружается из статических данных');
+        console.log('Контент загружен по умолчанию');
     }
 }
 
 // Загрузка портфолио
-let portfolioOffset = 0;
-const portfolioLimit = 6;
-
 async function loadPortfolio() {
     try {
-        const response = await fetch(`api/portfolio.php?offset=${portfolioOffset}&limit=${portfolioLimit}`);
+        const response = await fetch('api/portfolio.php');
         const portfolio = await response.json();
         
-        const grid = document.getElementById('portfolio-grid');
-        
-        portfolio.forEach(item => {
-            const portfolioItem = document.createElement('div');
-            portfolioItem.className = 'portfolio-item';
-            portfolioItem.innerHTML = `
-                <img src="${item.image}" alt="${item.title}">
-                <div class="portfolio-overlay">
-                    <div class="portfolio-info">
+        const portfolioGrid = document.getElementById('portfolio-grid');
+        if (portfolioGrid) {
+            portfolioGrid.innerHTML = '';
+            
+            portfolio.forEach(item => {
+                const portfolioItem = document.createElement('div');
+                portfolioItem.className = 'portfolio-item';
+                portfolioItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" loading="lazy">
+                    <div class="portfolio-content">
                         <h3>${item.title}</h3>
                         <p>${item.description}</p>
                     </div>
-                </div>
-            `;
-            grid.appendChild(portfolioItem);
-        });
-        
-        portfolioOffset += portfolioLimit;
-        
+                `;
+                portfolioGrid.appendChild(portfolioItem);
+            });
+        }
     } catch (error) {
-        // Загружаем демо-контент
-        loadDemoPortfolio();
+        console.log('Портфолио загружено по умолчанию');
+        loadDefaultPortfolio();
     }
 }
 
-function loadDemoPortfolio() {
-    const demoItems = [
-        { title: 'Свадьба Анны и Дмитрия', description: 'Романтичная церемония в загородном клубе', image: 'uploads/portfolio1.jpg' },
-        { title: 'Корпоратив IT-компании', description: 'Современный формат с интерактивными играми', image: 'uploads/portfolio2.jpg' },
-        { title: 'Юбилей 50 лет', description: 'Семейный праздник с теплой атмосферой', image: 'uploads/portfolio3.jpg' },
-        { title: 'Новогодний корпоратив', description: 'Яркое шоу с артистами и конкурсами', image: 'uploads/portfolio4.jpg' },
-        { title: 'Детский день рождения', description: 'Веселый праздник с аниматорами', image: 'uploads/portfolio5.jpg' },
-        { title: 'Выпускной вечер', description: 'Торжественное мероприятие для выпускников', image: 'uploads/portfolio6.jpg' }
-    ];
-    
-    const grid = document.getElementById('portfolio-grid');
-    
-    demoItems.forEach(item => {
-        const portfolioItem = document.createElement('div');
-        portfolioItem.className = 'portfolio-item';
-        portfolioItem.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x300/667eea/white?text=${encodeURIComponent(item.title)}'">
-            <div class="portfolio-overlay">
-                <div class="portfolio-info">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
+// Загрузка отзывов
+async function loadReviews() {
+    try {
+        const response = await fetch('api/reviews.php');
+        const reviews = await response.json();
+        
+        const reviewsGrid = document.getElementById('reviews-grid');
+        if (reviewsGrid) {
+            reviewsGrid.innerHTML = '';
+            
+            reviews.forEach(review => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                reviewItem.innerHTML = `
+                    <div class="review-text">"${review.text}"</div>
+                    <div class="review-author">
+                        <img src="${review.avatar}" alt="${review.name}" loading="lazy">
+                        <div class="review-author-info">
+                            <h4>${review.name}</h4>
+                            <p>${review.event}</p>
+                        </div>
+                    </div>
+                `;
+                reviewsGrid.appendChild(reviewItem);
+            });
+        }
+    } catch (error) {
+        console.log('Отзывы загружены по умолчанию');
+        loadDefaultReviews();
+    }
+}
+
+// Загрузка портфолио по умолчанию
+function loadDefaultPortfolio() {
+    const portfolioGrid = document.getElementById('portfolio-grid');
+    if (portfolioGrid) {
+        portfolioGrid.innerHTML = `
+            <div class="portfolio-item">
+                <img src="uploads/portfolio1.jpg" alt="Свадьба" loading="lazy">
+                <div class="portfolio-content">
+                    <h3>Свадьба Анны и Михаила</h3>
+                    <p>Романтичная церемония в загородном клубе</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="uploads/portfolio2.jpg" alt="Корпоратив" loading="lazy">
+                <div class="portfolio-content">
+                    <h3>Корпоратив IT-компании</h3>
+                    <p>Новогодний корпоратив с интерактивными играми</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <img src="uploads/portfolio3.jpg" alt="День рождения" loading="lazy">
+                <div class="portfolio-content">
+                    <h3>Юбилей 50 лет</h3>
+                    <p>Торжественный вечер в честь юбилея</p>
                 </div>
             </div>
         `;
-        grid.appendChild(portfolioItem);
-    });
+    }
 }
 
+// Загрузка отзывов по умолчанию
+function loadDefaultReviews() {
+    const reviewsGrid = document.getElementById('reviews-grid');
+    if (reviewsGrid) {
+        reviewsGrid.innerHTML = `
+            <div class="review-item">
+                <div class="review-text">"Булат сделал нашу свадьбу незабываемой! Профессиональный подход, отличная организация и потрясающая атмосфера. Рекомендую всем!"</div>
+                <div class="review-author">
+                    <img src="uploads/avatar1.jpg" alt="Анна" loading="lazy">
+                    <div class="review-author-info">
+                        <h4>Анна Петрова</h4>
+                        <p>Свадьба</p>
+                    </div>
+                </div>
+            </div>
+            <div class="review-item">
+                <div class="review-text">"Отличный ведущий! Наш корпоратив прошел на высшем уровне. Все сотрудники остались довольны. Спасибо за профессионализм!"</div>
+                <div class="review-author">
+                    <img src="uploads/avatar2.jpg" alt="Михаил" loading="lazy">
+                    <div class="review-author-info">
+                        <h4>Михаил Иванов</h4>
+                        <p>Корпоратив</p>
+                    </div>
+                </div>
+            </div>
+            <div class="review-item">
+                <div class="review-text">"Булат провел мой день рождения просто потрясающе! Гости до сих пор вспоминают этот вечер. Очень рекомендую!"</div>
+                <div class="review-author">
+                    <img src="uploads/avatar3.jpg" alt="Елена" loading="lazy">
+                    <div class="review-author-info">
+                        <h4>Елена Смирнова</h4>
+                        <p>День рождения</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Загрузка дополнительного портфолио
 function loadMorePortfolio() {
-    loadPortfolio();
+    const portfolioGrid = document.getElementById('portfolio-grid');
+    if (portfolioGrid) {
+        const additionalItems = [
+            {
+                image: 'uploads/portfolio4.jpg',
+                title: 'Выпускной вечер',
+                description: 'Торжественный выпускной в школе'
+            },
+            {
+                image: 'uploads/portfolio5.jpg',
+                title: 'Открытие ресторана',
+                description: 'Презентация нового ресторана'
+            },
+            {
+                image: 'uploads/portfolio6.jpg',
+                title: 'Детский праздник',
+                description: 'День рождения ребенка с анимацией'
+            }
+        ];
+        
+        additionalItems.forEach(item => {
+            const portfolioItem = document.createElement('div');
+            portfolioItem.className = 'portfolio-item';
+            portfolioItem.innerHTML = `
+                <img src="${item.image}" alt="${item.title}" loading="lazy">
+                <div class="portfolio-content">
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                </div>
+            `;
+            portfolioGrid.appendChild(portfolioItem);
+        });
+    }
 }
 
 // Параллакс эффект для hero секции
@@ -275,116 +322,7 @@ function initLazyLoading() {
     images.forEach(img => imageObserver.observe(img));
 }
 
-// Дополнительные интерактивные эффекты
-function initAdvancedEffects() {
-    // Эффект печатания для заголовков
-    const typewriterElements = document.querySelectorAll('.hero-title .title-line');
-    typewriterElements.forEach(element => {
-        const text = element.textContent;
-        element.textContent = '';
-        element.style.borderRight = '2px solid var(--accent-primary)';
-        
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                element.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            } else {
-                element.style.borderRight = 'none';
-            }
-        };
-        
-        setTimeout(typeWriter, 1000);
-    });
-    
-    // Эффект морфинга для кнопок
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-            button.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
-        });
-        
-        button.addEventListener('mouseleave', () => {
-            button.style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
-        });
-    });
-    
-    // Эффект волны при клике
-    document.addEventListener('click', (e) => {
-        const ripple = document.createElement('div');
-        ripple.style.cssText = `
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, rgba(0, 245, 255, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            left: ${e.clientX - 10}px;
-            top: ${e.clientY - 10}px;
-            animation: ripple 0.6s ease-out forwards;
-        `;
-        
-        document.body.appendChild(ripple);
-        
-        setTimeout(() => {
-            ripple.remove();
-        }, 600);
-    });
-}
-
-// Оптимизированный эффект скролла
-function initSmoothScroll() {
-    let isScrolling = false;
-    let scrollTimeout;
-    
-    window.addEventListener('scroll', () => {
-        if (!isScrolling) {
-            window.requestAnimationFrame(() => {
-                // Добавляем эффект размытия при быстром скролле
-                const scrollSpeed = Math.abs(window.scrollY - (window.lastScrollY || 0));
-                if (scrollSpeed > 10) {
-                    document.body.style.filter = 'blur(1px)';
-                    clearTimeout(scrollTimeout);
-                    scrollTimeout = setTimeout(() => {
-                        document.body.style.filter = 'none';
-                    }, 100);
-                }
-                
-                window.lastScrollY = window.scrollY;
-                isScrolling = false;
-            });
-        }
-        isScrolling = true;
-    });
-}
-
-// Оптимизация производительности
-function optimizePerformance() {
-    // Отключаем анимации на слабых устройствах
-    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
-        document.documentElement.style.setProperty('--transition', 'none');
-        document.documentElement.style.setProperty('--transition-fast', 'none');
-        document.documentElement.style.setProperty('--transition-slow', 'none');
-    }
-    
-    // Оптимизация для мобильных устройств
-    if (window.innerWidth < 768) {
-        // Уменьшаем количество частиц
-        const particles = document.querySelectorAll('.particles div');
-        particles.forEach((particle, index) => {
-            if (index > 20) {
-                particle.style.display = 'none';
-            }
-        });
-    }
-}
-
 // Инициализация после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
     initLazyLoading();
-    initAdvancedEffects();
-    initSmoothScroll();
-    optimizePerformance();
 });

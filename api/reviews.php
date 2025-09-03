@@ -14,16 +14,16 @@ $method = $_SERVER['REQUEST_METHOD'];
 try {
     switch ($method) {
         case 'GET':
-            getPortfolio($db);
+            getReviews($db);
             break;
         case 'POST':
-            addPortfolioItem($db);
+            addReview($db);
             break;
         case 'PUT':
-            updatePortfolioItem($db);
+            updateReview($db);
             break;
         case 'DELETE':
-            deletePortfolioItem($db);
+            deleteReview($db);
             break;
         default:
             http_response_code(405);
@@ -35,34 +35,35 @@ try {
     echo json_encode(['error' => $e->getMessage()]);
 }
 
-function getPortfolio($db) {
-    $stmt = $db->query("SELECT * FROM portfolio ORDER BY created_at DESC");
-    $portfolio = $stmt->fetchAll(PDO::FETCH_ASSOC);
+function getReviews($db) {
+    $stmt = $db->query("SELECT * FROM reviews ORDER BY created_at DESC");
+    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    echo json_encode($portfolio);
+    echo json_encode($reviews);
 }
 
-function addPortfolioItem($db) {
+function addReview($db) {
     $input = json_decode(file_get_contents('php://input'), true);
     
-    if (!$input || !isset($input['title']) || !isset($input['description']) || !isset($input['image'])) {
+    if (!$input || !isset($input['name']) || !isset($input['text']) || !isset($input['event'])) {
         http_response_code(400);
         echo json_encode(['error' => 'Missing required fields']);
         return;
     }
     
-    $stmt = $db->prepare("INSERT INTO portfolio (title, description, image, category) VALUES (?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT INTO reviews (name, text, event, avatar, rating) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([
-        $input['title'],
-        $input['description'],
-        $input['image'],
-        $input['category'] ?? 'general'
+        $input['name'],
+        $input['text'],
+        $input['event'],
+        $input['avatar'] ?? 'uploads/default-avatar.jpg',
+        $input['rating'] ?? 5
     ]);
     
     echo json_encode(['success' => true, 'id' => $db->lastInsertId()]);
 }
 
-function updatePortfolioItem($db) {
+function updateReview($db) {
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input || !isset($input['id'])) {
@@ -71,19 +72,20 @@ function updatePortfolioItem($db) {
         return;
     }
     
-    $stmt = $db->prepare("UPDATE portfolio SET title = ?, description = ?, image = ?, category = ? WHERE id = ?");
+    $stmt = $db->prepare("UPDATE reviews SET name = ?, text = ?, event = ?, avatar = ?, rating = ? WHERE id = ?");
     $stmt->execute([
-        $input['title'],
-        $input['description'],
-        $input['image'],
-        $input['category'] ?? 'general',
+        $input['name'],
+        $input['text'],
+        $input['event'],
+        $input['avatar'] ?? 'uploads/default-avatar.jpg',
+        $input['rating'] ?? 5,
         $input['id']
     ]);
     
     echo json_encode(['success' => true]);
 }
 
-function deletePortfolioItem($db) {
+function deleteReview($db) {
     $id = $_GET['id'] ?? null;
     
     if (!$id) {
@@ -92,7 +94,7 @@ function deletePortfolioItem($db) {
         return;
     }
     
-    $stmt = $db->prepare("DELETE FROM portfolio WHERE id = ?");
+    $stmt = $db->prepare("DELETE FROM reviews WHERE id = ?");
     $stmt->execute([$id]);
     
     echo json_encode(['success' => true]);

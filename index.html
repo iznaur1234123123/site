@@ -3,25 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Булат Докуев - Профессиональный ведущий</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Булат Докуев - Профессиональный ведущий мероприятий</title>
+    <meta name="description" content="Профессиональный ведущий мероприятий Булат Докуев. Свадьбы, корпоративы, дни рождения. Создаю незабываемую атмосферу на ваших торжествах.">
+    <meta name="keywords" content="ведущий, свадьба, корпоратив, день рождения, мероприятие, Булат Докуев">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Булат Докуев - Профессиональный ведущий">
+    <meta property="og:description" content="Создаю незабываемую атмосферу на ваших торжествах">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="uploads/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="uploads/favicon.ico">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- Навигация -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <span class="logo-text">Булат Докуев</span>
+                <span class="logo-text" data-content="logo_text">Булат Докуев</span>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Главная</a></li>
                 <li><a href="#about" class="nav-link">О себе</a></li>
                 <li><a href="#services" class="nav-link">Услуги</a></li>
                 <li><a href="#portfolio" class="nav-link">Портфолио</a></li>
+                <li><a href="#reviews" class="nav-link">Отзывы</a></li>
                 <li><a href="#contact" class="nav-link">Контакты</a></li>
             </ul>
             <div class="hamburger">
@@ -89,15 +108,15 @@
                 <div class="about-stats">
                     <div class="stat-item">
                         <div class="stat-number" data-number="500">500+</div>
-                        <div class="stat-label">Проведенных мероприятий</div>
+                        <div class="stat-label" data-content="stat1_label">Проведенных мероприятий</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" data-number="8">8</div>
-                        <div class="stat-label">Лет опыта</div>
+                        <div class="stat-label" data-content="stat2_label">Лет опыта</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" data-number="100">100%</div>
-                        <div class="stat-label">Довольных клиентов</div>
+                        <div class="stat-label" data-content="stat3_label">Довольных клиентов</div>
                     </div>
                 </div>
             </div>
@@ -119,9 +138,9 @@
                     <h3 data-content="service1_title">Свадьбы</h3>
                     <p data-content="service1_description">Создаю романтичную и торжественную атмосферу для самого важного дня в вашей жизни</p>
                     <div class="service-features">
-                        <span>Церемония</span>
-                        <span>Банкет</span>
-                        <span>Развлечения</span>
+                        <span data-content="service1_feature1">Церемония</span>
+                        <span data-content="service1_feature2">Банкет</span>
+                        <span data-content="service1_feature3">Развлечения</span>
                     </div>
                 </div>
                 <div class="service-card">
@@ -131,9 +150,9 @@
                     <h3 data-content="service2_title">Корпоративы</h3>
                     <p data-content="service2_description">Объединяю коллектив и создаю позитивную атмосферу на корпоративных мероприятиях</p>
                     <div class="service-features">
-                        <span>Презентации</span>
-                        <span>Тимбилдинг</span>
-                        <span>Награждения</span>
+                        <span data-content="service2_feature1">Презентации</span>
+                        <span data-content="service2_feature2">Тимбилдинг</span>
+                        <span data-content="service2_feature3">Награждения</span>
                     </div>
                 </div>
                 <div class="service-card">
@@ -143,9 +162,9 @@
                     <h3 data-content="service3_title">Дни рождения</h3>
                     <p data-content="service3_description">Делаю день рождения незабываемым праздником для именинника и гостей</p>
                     <div class="service-features">
-                        <span>Юбилеи</span>
-                        <span>Детские праздники</span>
-                        <span>Тематические вечеринки</span>
+                        <span data-content="service3_feature1">Юбилеи</span>
+                        <span data-content="service3_feature2">Детские праздники</span>
+                        <span data-content="service3_feature3">Тематические вечеринки</span>
                     </div>
                 </div>
                 <div class="service-card">
@@ -155,9 +174,9 @@
                     <h3 data-content="service4_title">Особые события</h3>
                     <p data-content="service4_description">Провожу выпускные, открытия, фестивали и другие значимые мероприятия</p>
                     <div class="service-features">
-                        <span>Выпускные</span>
-                        <span>Открытия</span>
-                        <span>Фестивали</span>
+                        <span data-content="service4_feature1">Выпускные</span>
+                        <span data-content="service4_feature2">Открытия</span>
+                        <span data-content="service4_feature3">Фестивали</span>
                     </div>
                 </div>
             </div>
@@ -176,6 +195,19 @@
             </div>
             <div class="portfolio-nav">
                 <button class="btn btn-primary" onclick="loadMorePortfolio()">Загрузить еще</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Отзывы -->
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-content="reviews_title">Отзывы клиентов</h2>
+                <p class="section-subtitle" data-content="reviews_subtitle">Что говорят о моей работе</p>
+            </div>
+            <div class="reviews-grid" id="reviews-grid">
+                <!-- Отзывы будут загружаться динамически -->
             </div>
         </div>
     </section>
